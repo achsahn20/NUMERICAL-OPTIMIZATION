@@ -1,0 +1,31 @@
+import numpy as np
+import scipy.optimize as opt
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+def f(x):
+    return -10*np.cos(np.pi*x - 4.4) + (x + 2.5) *x
+
+x0 = [-2]
+
+minimizer_kwargs = {"method": "BFGS"}
+optimization_algorithm = opt.basinhopping (f, x0, minimizer_kwargs = minimizer_kwargs, niter = 200)
+print("1-D function")
+print (optimization_algorithm.message[0])
+optimized_x = optimization_algorithm.x
+optimized_fun = optimization_algorithm.fun
+
+print("Optimized x: ", optimized_x)
+print("Optimized function value: ", optimized_fun)
+
+#Plot Code
+sns.set_theme()
+
+X = np.arange(-20, 20, 0.2)
+y = [f(x) for x in X]
+
+plt.vlines(x = optimized_x, ymin = -20, ymax = 125, colors = 'red')
+plt.hlines (y = optimized_fun, xmin = -20, xmax = 20, colors = 'red')
+plt.plot(X, y)
+plt.plot(optimized_x, optimized_fun, 'o', color = "black")
+plt.show()
