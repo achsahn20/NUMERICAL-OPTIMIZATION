@@ -1,0 +1,22 @@
+import numpy as np
+import scipy.optimize as opt
+
+def f(x):
+   return (x[0] - 6)**2 + (x[1] + 4)**2
+
+def constraint(x):
+   return (x[0]**2 + x[1]**2 - 80)
+
+cons = ({'type': 'eq', 'fun': constraint})
+# Set the initial guess for the optimization
+x0 = np.array([3, -5])
+
+# Minimize the objective function subject to the constraints
+result = opt.minimize(f, x0, constraints=cons)
+# Print message indicating why the process terminated
+
+
+print(result.message)
+
+# Print the relevant x-value that results in constrained minimum
+print(result.x)
