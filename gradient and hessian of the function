@@ -1,0 +1,13 @@
+import sympy as sp
+x1, x2 = sp.symbols('x1 x2')
+
+f = 1000*(x2 - x1**2)**2 + (1 - x1)**2
+
+gradient = [sp.diff(f, var) for var in (x1, x2)]
+print("Gradient:\n", gradient)
+print()
+
+hessian = [[sp.diff(gradient[i], var_j) for var_j in (x1, x2)] for i in (0, 1)]
+print("Hessian:")
+for row in hessian:
+    print(row)
