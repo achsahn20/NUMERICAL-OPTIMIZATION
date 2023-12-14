@@ -1,0 +1,51 @@
+import pulp
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create a Linear Programming problem
+lp_problem = pulp.LpProblem("Graphical_LPP", pulp.LpMaximize)
+
+# Define decision variables
+x = pulp.LpVariable("x", lowBound=0)
+y = pulp.LpVariable("y", lowBound=0)
+
+# Objective function
+lp_problem += 6*x + 2*y, "Z"
+
+# Constraints
+lp_problem += 6*x + y <= 20
+lp_problem += 8*x - 5*y >= -15
+lp_problem += x + y <= 15
+
+solver = pulp.LpSolverDefault
+solver.msg = 0
+
+# Solve the problem
+lp_problem.solve(solver)
+
+
+# Display the results
+print("Status:", pulp.LpStatus[lp_problem.status])
+print("Optimal values:")
+print("x =", pulp.value(x))
+print("y =", pulp.value(y))
+print("Optimal objective function value (Z) =", pulp.value(lp_problem.objective))
+
+# Plotting the feasible region
+x_values = np.linspace(0, 10, 100)
+y1_values = (20 - 2*x_values)
+y2_values = (8*x_values + 10) / 5
+y3_values = (15 - x_values) / 2
+
+plt.plot(x_values, y1_values, label="6x + y <= 20")
+plt.plot(x_values, y2_values, label="8x - 5y >= -10")
+plt.plot(x_values, y3_values, label="x + 2y <= 15")
+
+plt.fill_between(x_values, 0, np.minimum(np.minimum(y1_values, y2_values), y3_values), where=(y1_values >= 0) & (y2_values >= 0) & (y3_values >= 0), interpolate=True, color='gray', alpha=0.5)
+
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Feasible Region")
+plt.legend()
+plt.grid(True)
+plt.show()
