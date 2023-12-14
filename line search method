@@ -1,0 +1,32 @@
+import numpy
+from numpy import arange
+from scipy.optimize import line_search
+from matplotlib import pyplot
+
+def objective(x):
+    return (-4.0 + x) **2.0
+def gradient(x):
+    return 2.0 * (-4.0 + x)
+point = -4.0
+direction = 100.0
+print('start=%.1f, direction=%.lf' % (point, direction))
+
+
+
+result = line_search(objective, gradient, point, direction)
+alpha = result[0]
+print('Alpha: %.3f' %alpha)
+print('Function evaluations: %d' %result[1])
+
+end = point + alpha*direction
+
+print('f(end) = f(%.3f) = %.3f' %(end, objective (end)))
+
+r_min, r_max = -10.0, 20.0
+inputs = arange (r_min, r_max, 0.1)
+targets = [objective (x) for x in inputs]
+pyplot.plot(inputs, targets, '--', label='objective')
+pyplot.plot([point], [objective (point)], 's', color='g')
+pyplot.plot([end], [objective (end)], 's', color='r')
+pyplot.legend()
+pyplot.show()
